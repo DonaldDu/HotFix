@@ -1,9 +1,16 @@
 package com.dhy.hotfix;
 
+import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -13,25 +20,110 @@ import java.lang.reflect.Field;
 import dalvik.system.DexClassLoader;
 
 public class HotFix {
-    private static final String name = "patch/dexOnly.apk";
+    private static final String name = "HotFix";
+
+    /**
+     * @param appInitClassName 类名只能用字符串方式传参，不能用 AppInit.class.getName()，否则无法加载到补丁包中的类。
+     *                         ClassLoader加载App类时，会自动把它import的类也加载了。
+     */
+    public HotFix(@NonNull Application application, @Nullable String appInitClassName) {
+        try {
+            HotFix.loadFile(application);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (appInitClassName != null) initApp(application, appInitClassName);
+    }
+
+    private void initApp(Application application, String className) {
+        try {
+            Class<?> appInitClass = Class.forName(className);
+            IAppInit appInit = (IAppInit) appInitClass.newInstance();
+            appInit.onAppCreate(application);
+        } catch (Exception e) {
+            Log.e("HotFix", "initApp error");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 检查补丁更新时，需要用这个参数
+     */
+    public static int getPatchVersion(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(name, 0);
+    }
+
+    /**
+     * 补丁下载成功后更新以保存
+     */
+    public static void updatePatchVersion(Context context, int versionCode) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE);
+        sharedPreferences
+                .edit()
+                .putInt(name, versionCode)
+                .apply();
+    }
+
+    public static File getHotFixFolder(Context context) {
+        return new File(context.getFilesDir(), name);
+    }
 
     public static void clearBuffer(Context context) {
-        File dexOnlyApk = new File(context.getFilesDir(), name);
-        if (dexOnlyApk.exists()) dexOnlyApk.delete();
+        File folder = getHotFixFolder(context);
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File file : files) file.delete();
+        }
     }
 
     static void loadFile(Context context) throws Exception {
-        File dexOnlyApk = new File(context.getFilesDir(), name);
-        if (!dexOnlyApk.exists()) {
-            File folder = dexOnlyApk.getParentFile();
-            //noinspection ConstantConditions
-            if (!folder.exists()) folder.mkdirs();
-            dexOnlyApk.createNewFile();
+        File patch = findPatch(context);
+        if (patch != null && !patch.exists()) {
+//            File folder = patch.getParentFile();
+//            //noinspection ConstantConditions
+//            if (!folder.exists()) folder.mkdirs();
+//            patch.createNewFile();
 
-            InputStream inputStream = context.getAssets().open(name);
-            copyStream(inputStream, new FileOutputStream(dexOnlyApk));
+//            InputStream inputStream = context.getAssets().open(name);
+//            copyStream(inputStream, new FileOutputStream(patch));
         }
-        loadPatch(context, dexOnlyApk);
+        if (patch != null && patch.exists() && patch.length() > 0) loadPatch(context, patch);
+    }
+
+    @Nullable
+    private static File findPatch(Context context) {
+        int versionCode = getVersionCode(context);
+        File folder = getHotFixFolder(context);
+        File[] files = folder.listFiles();
+        File patch = null;
+        final String startKey = "-vc";
+        if (files != null) {
+            for (File file : files) {//dexOnly-vc123.apk
+                String name = file.getName();
+                int start = name.indexOf(startKey);
+                int end = name.indexOf(".apk");
+                if (start != -1 && end != -1) {
+                    int vc = Integer.parseInt(name.substring(start + startKey.length(), end));
+                    if (vc > versionCode) {
+                        versionCode = vc;
+                        patch = file;
+                    }
+                }
+            }
+        }
+        return patch;
+    }
+
+    private static int getVersionCode(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     private static void loadPatch(Context context, File file) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
