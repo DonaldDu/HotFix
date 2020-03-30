@@ -13,8 +13,14 @@ import java.lang.reflect.Field;
 import dalvik.system.DexClassLoader;
 
 public class HotFix {
+    private static final String name = "patch/dexOnly.apk";
+
+    public static void clearBuffer(Context context) {
+        File dexOnlyApk = new File(context.getFilesDir(), name);
+        if (dexOnlyApk.exists()) dexOnlyApk.delete();
+    }
+
     static void loadFile(Context context) throws Exception {
-        String name = "patch/dexOnly.apk";
         File dexOnlyApk = new File(context.getFilesDir(), name);
         if (!dexOnlyApk.exists()) {
             File folder = dexOnlyApk.getParentFile();

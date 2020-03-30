@@ -1,11 +1,11 @@
 package com.dhy.hotfix;
 
-import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.multidex.MultiDexApplication;
 
-public class HotFixApp extends Application {
+public class HotFixApp extends MultiDexApplication {
     private final String appInitClassName;
     private IAppInit appInit;
 

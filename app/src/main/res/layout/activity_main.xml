@@ -9,15 +9,15 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btLoadDex"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="load dex" />
-
-    <Button
         android:id="@+id/btShowSetting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Show Setting 0" />
+        android:text="Show Setting" />
+
+    <Button
+        android:id="@+id/btClearBuffer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="clear buffer" />
 
 </LinearLayout>
