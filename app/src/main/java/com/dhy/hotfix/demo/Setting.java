@@ -1,5 +1,7 @@
 package com.dhy.hotfix.demo;
 
-public class Setting {
+import java.io.Serializable;
+
+public class Setting implements Serializable {
     String name = "123";
 }

@@ -31,9 +31,9 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-static File genDexOnlyApk(File apkFile) throws IOException {
+static File genDexOnlyApk(File apkFile, String pn, int vc) throws IOException {
     ZipFile apk = new ZipFile(apkFile)
-    File dexOnlyFile = new File(apkFile.getParentFile(), "dexOnly.apk")
+    File dexOnlyFile = new File(apkFile.getParentFile(), "dexOnly_${pn}-vc${vc}.apk")
     if (dexOnlyFile.exists()) dexOnlyFile.delete()
     ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(dexOnlyFile))
     Enumeration<? extends ZipEntry> entries = apk.entries()

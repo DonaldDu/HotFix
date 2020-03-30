@@ -40,11 +40,12 @@ dependencies {
 }
 
 task genDexOnlyApk(group: 'patch', dependsOn: ['assembleDebug']) {
-    doLast{
+    doLast {
         def apk = new File(project.buildDir, '\\outputs\\apk\\debug').listFiles().find {
             it.name.endsWith('.apk') && it.name.contains('debug')
         }
-        File dexOnlyFile = genDexOnlyApk(apk)
+        def config = android.defaultConfig
+        File dexOnlyFile = genDexOnlyApk(apk, config.applicationId, config.versionCode)
 
         copy {
             def old = file("${project.projectDir}\\src\\main\\assets\\patch\\" + dexOnlyFile.name)

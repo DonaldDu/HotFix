@@ -7,8 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 import dalvik.system.DexClassLoader;
 
@@ -26,7 +25,7 @@ public class HotFix {
      * @param appInitClassName 类名只能用字符串方式传参，不能用 AppInit.class.getName()，否则无法加载到补丁包中的类。
      *                         ClassLoader加载App类时，会自动把它import的类也加载了。
      */
-    public HotFix(@NonNull Application application, @Nullable String appInitClassName) {
+    public HotFix(Application application, String appInitClassName) {
         try {
             HotFix.loadFile(application);
         } catch (Exception e) {
@@ -91,7 +90,6 @@ public class HotFix {
         if (patch != null && patch.exists() && patch.length() > 0) loadPatch(context, patch);
     }
 
-    @Nullable
     private static File findPatch(Context context) {
         int versionCode = getVersionCode(context);
         File folder = getHotFixFolder(context);
@@ -127,6 +125,7 @@ public class HotFix {
     }
 
     private static void loadPatch(Context context, File file) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+        Log.i(name, "loadPatch: " + file.getAbsolutePath());
         Field pathListField = getPathListField();
         ClassLoader parentLoader = context.getClassLoader();
         Object parentPathList = pathListField.get(parentLoader);
