@@ -39,18 +39,18 @@ dependencies {
     implementation project(path: ':hotfix')
 }
 
-task genDexOnlyApk(group: 'patch', dependsOn: ['assembleDebug']) {
+task genHotFixPatch(group: 'patch', dependsOn: ['assembleDebug']) {
     doLast {
         def apk = new File(project.buildDir, '\\outputs\\apk\\debug').listFiles().find {
             it.name.endsWith('.apk') && it.name.contains('debug')
         }
         def config = android.defaultConfig
-        File dexOnlyFile = genDexOnlyApk(apk, config.applicationId, config.versionCode)
+        File patch = genHotFixPatch(apk, config.applicationId, config.versionCode)
 
         copy {
-            def old = file("${project.projectDir}\\src\\main\\assets\\patch\\" + dexOnlyFile.name)
+            def old = file("${project.projectDir}\\src\\main\\assets\\patch\\" + patch.name)
             if (old.exists()) old.delete()
-            from dexOnlyFile.absolutePath
+            from patch.absolutePath
             into { old.parentFile.absolutePath }
         }
     }

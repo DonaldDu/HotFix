@@ -31,11 +31,11 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-static File genDexOnlyApk(File apkFile, String pn, int vc) throws IOException {
+static File genHotFixPatch(File apkFile, String pn, int vc) throws IOException {
     ZipFile apk = new ZipFile(apkFile)
-    File dexOnlyFile = new File(apkFile.getParentFile(), "dexOnly_${pn}-vc${vc}.apk")
-    if (dexOnlyFile.exists()) dexOnlyFile.delete()
-    ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(dexOnlyFile))
+    File patch = new File(apkFile.getParentFile(), "patch-${pn}-vc${vc}.apk")
+    if (patch.exists()) patch.delete()
+    ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(patch))
     Enumeration<? extends ZipEntry> entries = apk.entries()
     while (entries.hasMoreElements()) {
         ZipEntry entry = entries.nextElement()
@@ -48,7 +48,7 @@ static File genDexOnlyApk(File apkFile, String pn, int vc) throws IOException {
     }
     outputStream.flush()
     outputStream.close()
-    return dexOnlyFile
+    return patch
 }
 
 private static void copyStream(InputStream inputStream, OutputStream outputStream) throws IOException {

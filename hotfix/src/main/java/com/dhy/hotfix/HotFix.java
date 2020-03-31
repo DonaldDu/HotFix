@@ -7,14 +7,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.logging.Logger;
 
 import dalvik.system.DexClassLoader;
 
@@ -22,27 +20,31 @@ public class HotFix {
     private static final String name = "HotFix";
 
     /**
-     * @param appInitClassName 类名只能用字符串方式传参，不能用 AppInit.class.getName()，否则无法加载到补丁包中的类。
+     * @param appInitClassName 可为null，类名只能用字符串方式传参，不能用 AppInit.class.getName()，否则无法加载到补丁包中的类。
      *                         ClassLoader加载App类时，会自动把它import的类也加载了。
      */
-    public HotFix(Application application, String appInitClassName) {
+    public static void init(Application application, String appInitClassName) {
         try {
             HotFix.loadFile(application);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (appInitClassName != null) initApp(application, appInitClassName);
+        if (appInitClassName != null && !appInitClassName.isEmpty()) initApp(application, appInitClassName);
     }
 
-    private void initApp(Application application, String className) {
+    private static void initApp(Application application, String className) {
         try {
             Class<?> appInitClass = Class.forName(className);
             IAppInit appInit = (IAppInit) appInitClass.newInstance();
             appInit.onAppCreate(application);
         } catch (Exception e) {
-            Log.e("HotFix", "initApp error");
+            Log.e(name, "initApp error");
             e.printStackTrace();
         }
+    }
+
+    public static String formatPatchFileName(int versionCode) {
+        return String.format("patch-vc%d.apk", versionCode);
     }
 
     /**
@@ -97,9 +99,9 @@ public class HotFix {
         File patch = null;
         final String startKey = "-vc";
         if (files != null) {
-            for (File file : files) {//dexOnly-vc123.apk
+            for (File file : files) {//patch-com.dhy.hotfix.demo-vc1.apk
                 String name = file.getName();
-                int start = name.indexOf(startKey);
+                int start = name.lastIndexOf(startKey);
                 int end = name.indexOf(".apk");
                 if (start != -1 && end != -1) {
                     int vc = Integer.parseInt(name.substring(start + startKey.length(), end));
