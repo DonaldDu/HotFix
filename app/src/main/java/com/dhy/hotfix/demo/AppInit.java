@@ -2,13 +2,14 @@ package com.dhy.hotfix.demo;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
+
 import com.dhy.hotfix.IAppInit;
 
-import org.jetbrains.annotations.NotNull;
 
 public class AppInit implements IAppInit {
     @Override
-    public void onAppCreate(@NotNull Application application) {
+    public void onAppCreate(@NonNull Application application) {
 
     }
 }
