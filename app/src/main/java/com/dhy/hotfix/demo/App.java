@@ -1,11 +1,10 @@
 package com.dhy.hotfix.demo;
 
-
-import android.app.Application;
+import androidx.multidex.MultiDexApplication;
 
 import com.dhy.hotfix.HotFix;
 
-public class App extends Application {
+public class App extends MultiDexApplication {
 
     @Override
     public void onCreate() {
