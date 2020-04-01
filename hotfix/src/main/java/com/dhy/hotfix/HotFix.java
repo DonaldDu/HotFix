@@ -93,7 +93,7 @@ public class HotFix {
     }
 
     private static File findPatch(Context context) {
-        int versionCode = getVersionCode(context);
+        int versionCode = getAppVersionCode(context);
         File folder = getHotFixFolder(context);
         File[] files = folder.listFiles();
         File patch = null;
@@ -115,7 +115,7 @@ public class HotFix {
         return patch;
     }
 
-    private static int getVersionCode(Context context) {
+    public static int getAppVersionCode(Context context) {
         try {
             PackageManager packageManager = context.getPackageManager();
             PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
@@ -124,6 +124,17 @@ public class HotFix {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static String getAppVersionName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionName;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static void loadPatch(Context context, File file) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
