@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import com.dhy.hotfix.HotFix
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.File
+import java.io.FileOutputStream
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,6 +19,21 @@ class MainActivity : AppCompatActivity() {
         }
         btClearBuffer.setOnClickListener {
             HotFix.clearBuffer(this)
+        }
+        btSaveFile.setOnClickListener {
+            val apk = assets.list("patch")!!.first()
+            val inputStream = assets.open("patch/$apk")
+            val folder = HotFix.getHotFixFolder(this)
+
+            val apkFile = File(folder, HotFix.formatPatchFileName(BuildConfig.VERSION_CODE + 1))
+            if (!folder.exists()) folder.mkdirs()
+            if (apkFile.exists()) apkFile.delete()
+            apkFile.createNewFile()
+
+            HotFix.copyStream(inputStream, FileOutputStream(apkFile))
+        }
+        btLoadPath.setOnClickListener {
+            HotFix.init(application, null)
         }
     }
 }

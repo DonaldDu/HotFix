@@ -29,7 +29,9 @@ public class HotFix {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (appInitClassName != null && !appInitClassName.isEmpty()) initApp(application, appInitClassName);
+        if (appInitClassName != null && !appInitClassName.isEmpty()) {
+            initApp(application, appInitClassName);
+        }
     }
 
     private static void initApp(Application application, String className) {
@@ -72,24 +74,24 @@ public class HotFix {
 
     public static void clearBuffer(Context context) {
         File folder = getHotFixFolder(context);
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File file : files) file.delete();
-        }
+        deleteAll(folder);
     }
 
-    static void loadFile(Context context) throws Exception {
-        File patch = findPatch(context);
-        if (patch != null && !patch.exists()) {
-//            File folder = patch.getParentFile();
-//            //noinspection ConstantConditions
-//            if (!folder.exists()) folder.mkdirs();
-//            patch.createNewFile();
-
-//            InputStream inputStream = context.getAssets().open(name);
-//            copyStream(inputStream, new FileOutputStream(patch));
+    private static void deleteAll(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) deleteAll(f);
+            }
         }
-        if (patch != null && patch.exists() && patch.length() > 0) loadPatch(context, patch);
+        file.delete();
+    }
+
+    private static void loadFile(Context context) throws Exception {
+        File patch = findPatch(context);
+        if (patch != null && patch.exists() && patch.length() > 0) {
+            loadPatch(context, patch);
+        }
     }
 
     private static File findPatch(Context context) {
@@ -138,9 +140,12 @@ public class HotFix {
     }
 
     private static void loadPatch(Context context, File file) throws NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
-        Log.i(name, "loadPatch: " + file.getAbsolutePath());
         Field pathListField = getPathListField();
         ClassLoader parentLoader = context.getClassLoader();
+        if (parentLoader.toString().contains(file.getName())) return;
+
+        Log.i(name, "loadPatch: " + file.getAbsolutePath());
+
         Object parentPathList = pathListField.get(parentLoader);
 
         ClassLoader extraLoader = createDexClassLoader(context, file, parentLoader);
@@ -189,7 +194,7 @@ public class HotFix {
         return dexElements;
     }
 
-    private static void copyStream(InputStream inputStream, OutputStream outputStream) throws IOException {
+    public static void copyStream(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buffer = new byte[1024 * 1024 * 10];
         int size;
         while (true) {
@@ -198,6 +203,8 @@ public class HotFix {
             else break;
         }
         inputStream.close();
+
+        outputStream.flush();
         outputStream.close();
     }
 }

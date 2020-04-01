@@ -20,4 +20,15 @@
         android:layout_height="wrap_content"
         android:text="clear buffer" />
 
+    <Button
+        android:id="@+id/btSaveFile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="save file" />
+
+    <Button
+        android:id="@+id/btLoadPath"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="load path" />
 </LinearLayout>
