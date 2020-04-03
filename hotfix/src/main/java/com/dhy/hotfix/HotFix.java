@@ -13,6 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import dalvik.system.DexClassLoader;
 
@@ -43,10 +45,6 @@ public class HotFix {
             Log.e(name, "initApp error");
             e.printStackTrace();
         }
-    }
-
-    public static String formatPatchFileName(int versionCode) {
-        return String.format("patch-vc%d.apk", versionCode);
     }
 
     /**
@@ -95,19 +93,23 @@ public class HotFix {
         }
     }
 
+    public static String formatPatchFileName(int versionCode) {
+        return String.format("%d.patch.apk", versionCode);
+    }
+
     private static File findPatch(Context context) {
         int versionCode = getAppVersionCode(context);
         File folder = getHotFixFolder(context);
         File[] files = folder.listFiles();
         File patch = null;
-        final String startKey = "-vc";
+        Pattern pattern = Pattern.compile("(\\d+)\\.patch\\.apk");
         if (files != null) {
-            for (File file : files) {//patch-com.dhy.hotfix.demo-vc1.apk
+            for (File file : files) {//1.patch.apk
                 String name = file.getName();
-                int start = name.lastIndexOf(startKey);
-                int end = name.indexOf(".apk");
-                if (start != -1 && end != -1) {
-                    int vc = Integer.parseInt(name.substring(start + startKey.length(), end));
+                Matcher matcher = pattern.matcher(name);
+                if (matcher.find()) {
+                    @SuppressWarnings("ConstantConditions")
+                    int vc = Integer.parseInt(matcher.group(1));
                     if (vc > versionCode) {
                         versionCode = vc;
                         patch = file;

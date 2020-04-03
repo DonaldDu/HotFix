@@ -4,13 +4,11 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName libV
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -22,7 +20,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 apply plugin: 'com.novoda.bintray-release'

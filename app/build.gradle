@@ -12,6 +12,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -20,6 +21,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            versionNameSuffix = '.' + defaultConfig.versionCode
 //            minifyEnabled true
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -28,6 +30,14 @@ android {
     compileOptions {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
+    }
+}
+
+if (project.hasProperty('pluginEnable')) {
+    apply plugin: 'com.dhy.HotFixPlugin'
+    hotFixUploader {
+        batScriptPath = BAT_PATH_DEPLOY_APK_HOTFIX
+        extras = ['testReleaseTypes': '0,1', 'bigTypeCode': 30000]
     }
 }
 
@@ -45,21 +55,4 @@ dependencies {
     implementation project(path: ':updater')
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'com.squareup.okhttp3:okhttp:4.4.1'
-}
-
-task genHotFixPatch(group: 'patch', dependsOn: ['assembleDebug']) {
-    doLast {
-        def apk = new File(project.buildDir, '\\outputs\\apk\\debug').listFiles().find {
-            it.name.endsWith('.apk') && it.name.contains('debug')
-        }
-        def config = android.defaultConfig
-        File patch = genHotFixPatch(apk, config.applicationId, config.versionCode)
-
-        copy {
-            def old = file("${project.projectDir}\\src\\main\\assets\\patch\\" + patch.name)
-            if (old.exists()) old.delete()
-            from patch.absolutePath
-            into { old.parentFile.absolutePath }
-        }
-    }
 }
