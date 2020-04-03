@@ -27,8 +27,14 @@
         android:text="save file" />
 
     <Button
-        android:id="@+id/btLoadPath"
+        android:id="@+id/btLoadPatch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="load path" />
+
+    <Button
+        android:id="@+id/btCheckPatchVersion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="check patch version" />
 </LinearLayout>

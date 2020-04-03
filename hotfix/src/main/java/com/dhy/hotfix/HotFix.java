@@ -73,6 +73,7 @@ public class HotFix {
     }
 
     public static void clearBuffer(Context context) {
+        updatePatchVersion(context, 0);
         File folder = getHotFixFolder(context);
         deleteAll(folder);
     }
