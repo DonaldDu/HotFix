@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dhy.hotfix.HotFix
-import com.dhy.hotfix.uploader.*
+import com.dhy.hotfix.updater.*
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             return Observable.just(listOf(user, user2))
         }
 
-        override fun checkPatchVersion(): Observable<IVersion> {
+        override fun checkPatchVersion(): Observable<IPatchVersion> {
             return Observable.just(AppVersion().apply {
                 url = "https://gitee.com/88911006/patch/raw/master/README.md"
                 versionCode = BuildConfig.VERSION_CODE + 1

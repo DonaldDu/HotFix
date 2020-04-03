@@ -2,9 +2,9 @@ package com.dhy.hotfix.demo;
 
 import androidx.annotation.NonNull;
 
-import com.dhy.hotfix.uploader.IVersion;
+import com.dhy.hotfix.updater.IPatchVersion;
 
-public class AppVersion implements IVersion {
+public class AppVersion implements IPatchVersion {
     public String url;
 
     @NonNull

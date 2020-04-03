@@ -1,17 +1,17 @@
-package com.dhy.hotfix.uploader
+package com.dhy.hotfix.updater
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import java.util.*
 
 internal class CurrentActivityWatcher(activity: Activity) : ActivityLifecycleCallbacks2 {
     private var current: Activity? = activity
     private val dialogs: WeakHashMap<Activity, Dialog> = WeakHashMap()
     private val application = activity.application
-    private var version: IVersion? = null
+    private var version: IPatchVersion? = null
 
     init {
         application.registerActivityLifecycleCallbacks(this)
@@ -31,7 +31,7 @@ internal class CurrentActivityWatcher(activity: Activity) : ActivityLifecycleCal
         dialogs.remove(activity)?.dismiss()
     }
 
-    fun show(version: IVersion?) {
+    fun show(version: IPatchVersion?) {
         this.version = version ?: return
         val activity: Activity = current ?: return
         if (activity.isFinishing) return

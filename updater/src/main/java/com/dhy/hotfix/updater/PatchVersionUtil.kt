@@ -1,16 +1,16 @@
 @file:Suppress("DEPRECATION")
 
-package com.dhy.hotfix.uploader
+package com.dhy.hotfix.updater
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.provider.Settings
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import com.dhy.hotfix.HotFix
 import com.dhy.xintent.Waterfall
 import com.liulishuo.okdownload.DownloadListener
@@ -24,14 +24,14 @@ import io.reactivex.schedulers.Schedulers
 
 class PatchVersionUtil(val context: Context) {
     private val TAG = "HotFix"
-    private fun IVersion.toDownloadTask(context: Context): DownloadTask.Builder {
+    private fun IPatchVersion.toDownloadTask(context: Context): DownloadTask.Builder {
         val patchFolder = HotFix.getHotFixFolder(context).absolutePath
         val patchFileName = HotFix.formatPatchFileName(versionCode)
         return DownloadTask.Builder(url, patchFolder, patchFileName)
     }
 
-    private lateinit var version: IVersion
-    fun download(version: IVersion, withUI: Boolean) {
+    private lateinit var version: IPatchVersion
+    fun download(version: IPatchVersion, withUI: Boolean) {
         this.version = version
         val task = version.toDownloadTask(context)
             .setPassIfAlreadyCompleted(true)
@@ -91,7 +91,7 @@ class PatchVersionUtil(val context: Context) {
 fun Activity.checkPatchVersion(api: PatchVersionApi, user: String) {
     val watcher = CurrentActivityWatcher(this)
     val activity: Activity = this
-    var version: IVersion? = null
+    var version: IPatchVersion? = null
     var patchUser: PatchUser? = null
     Waterfall.flow {
         api.checkPatchVersion().subscribeX {
@@ -116,7 +116,7 @@ fun Activity.checkPatchVersion(api: PatchVersionApi, user: String) {
     }
 }
 
-fun IVersion?.isNewPatch(context: Context): Boolean {
+fun IPatchVersion?.isNewPatch(context: Context): Boolean {
     return if (this != null && versionCode > 0) {
         val pv = HotFix.getPatchVersion(context)
         val vc = HotFix.getAppVersionCode(context)

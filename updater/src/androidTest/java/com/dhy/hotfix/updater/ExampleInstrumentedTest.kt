@@ -1,4 +1,4 @@
-package com.dhy.hotfix.uploader
+package com.dhy.hotfix.updater
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

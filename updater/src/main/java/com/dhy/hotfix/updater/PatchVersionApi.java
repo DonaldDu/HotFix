@@ -1,4 +1,4 @@
-package com.dhy.hotfix.uploader;
+package com.dhy.hotfix.updater;
 
 
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import io.reactivex.Observable;
 
 public interface PatchVersionApi {
-    Observable<IVersion> checkPatchVersion();
+    Observable<IPatchVersion> checkPatchVersion();
 
     Observable<List<PatchUser>> fetchPatchUsers();
 }

@@ -1,4 +1,4 @@
-package com.dhy.hotfix.uploader
+package com.dhy.hotfix.updater
 
 import android.app.Activity
 import android.app.Application
