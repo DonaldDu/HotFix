@@ -14,8 +14,8 @@ apply plugin: 'java'
 apply plugin: 'com.novoda.bintray-release'
 publish {
     userOrg = 'user'
-    groupId = 'com.github.DonaldDu'
-    artifactId = 'HotFixPlugin'
+    groupId = 'com.github.DonaldDu.HotFix'
+    artifactId = 'Plugin'
     publishVersion = libV
     desc = 'desc'
     website = 'website'

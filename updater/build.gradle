@@ -25,7 +25,7 @@ android {
 apply plugin: 'com.novoda.bintray-release'
 publish {
     userOrg = 'user'
-    groupId = 'com.github.DonaldDu'
+    groupId = 'com.github.DonaldDu.HotFix'
     artifactId = 'Updater'
     //noinspection GroovyAccessibility
     publishVersion = android.defaultConfig.versionName

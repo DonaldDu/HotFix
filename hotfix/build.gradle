@@ -21,8 +21,8 @@ android {
 }
 publish {
     userOrg = 'user'
-    groupId = 'com.github.DonaldDu'
-    artifactId = 'HotFix'
+    groupId = 'com.github.DonaldDu.HotFix'
+    artifactId = 'Patch'
     //noinspection GroovyAccessibility
     publishVersion = android.defaultConfig.versionName
     desc = 'desc'
