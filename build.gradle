@@ -1,8 +1,16 @@
 buildscript {
+    ext.hasPluginEnableFlag = {
+        File localProperties = project.rootProject.file('local.properties')
+        if (localProperties.exists()) {
+            Properties properties = new Properties()
+            properties.load(localProperties.newDataInputStream())
+            return properties.getProperty('pluginEnableFlag') != null
+        } else return false
+    }
+
     ext.kotlin_version = '1.3.71'
     ext.libV = '1.0.0'
-    ext.pluginEnableFlag = true//fixme comment it when publish
-    ext.pluginEnable = project.hasProperty('pluginEnableFlag')
+    ext.pluginEnable = hasPluginEnableFlag()
     repositories {
         google()
         jcenter()
@@ -25,6 +33,7 @@ allprojects {
     tasks.withType(Javadoc) {
         enabled = false
     }
+
 }
 
 task clean(type: Delete) {
