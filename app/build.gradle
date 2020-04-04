@@ -33,7 +33,7 @@ android {
     }
 }
 
-if (project.hasProperty('pluginEnable')) {
+if (pluginEnable) {
     apply plugin: 'com.dhy.HotFixPlugin'
     hotFixUploader {
         batScriptPath = BAT_PATH_DEPLOY_APK_HOTFIX
