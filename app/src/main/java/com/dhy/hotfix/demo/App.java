@@ -1,18 +1,15 @@
 package com.dhy.hotfix.demo;
 
-import androidx.multidex.MultiDexApplication;
+import android.app.Application;
 
-import com.dhy.hotfix.HotFix;
+import androidx.annotation.NonNull;
 
-public class App extends MultiDexApplication {
+import com.dhy.hotfix.IAppInit;
 
+
+public class App implements IAppInit {
     @Override
-    public void onCreate() {
-        super.onCreate();
-        initHotFix();
-    }
+    public void onAppCreate(@NonNull Application application) {
 
-    private void initHotFix() {
-        HotFix.init(this, "com.dhy.hotfix.demo.AppInit");
     }
 }
