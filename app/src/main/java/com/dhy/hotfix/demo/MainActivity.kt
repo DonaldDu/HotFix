@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val api = object : PatchVersionApi {
+    private val api = object : IPatchVersionApi {
         override fun fetchPatchUsers(): Observable<List<PatchUser>> {
             val user = PatchUser().apply {
                 version = "*"

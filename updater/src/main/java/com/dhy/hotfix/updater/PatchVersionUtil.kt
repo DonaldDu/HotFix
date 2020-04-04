@@ -88,7 +88,7 @@ class PatchVersionUtil(val context: Context) {
     }
 }
 
-fun Activity.checkPatchVersion(api: PatchVersionApi, user: String) {
+fun Activity.checkPatchVersion(api: IPatchVersionApi, user: String) {
     val watcher = CurrentActivityWatcher(this)
     val activity: Activity = this
     var version: IPatchVersion? = null
