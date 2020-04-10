@@ -94,7 +94,7 @@ public class HotFix {
     }
 
     public static String formatPatchFileName(int versionCode) {
-        return String.format("%d.patch.apk", versionCode);
+        return String.format("%d.hotfix.apk", versionCode);
     }
 
     private static File findPatch(Context context) {

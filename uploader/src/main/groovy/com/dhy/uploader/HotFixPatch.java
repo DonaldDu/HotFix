@@ -13,7 +13,7 @@ import java.util.zip.ZipOutputStream;
 public class HotFixPatch {
     public static File genHotFixPatch(File apkFile, String pn, int vc) throws IOException {
         ZipFile apk = new ZipFile(apkFile);
-        File patch = new File(apkFile.getParentFile(), String.format("%s-vc%d.patch.apk", pn, vc));
+        File patch = new File(apkFile.getParentFile(), String.format("%s-vc%d.hotfix.apk", pn, vc));
         if (patch.exists()) patch.delete();
         ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(patch));
         Enumeration<? extends ZipEntry> entries = apk.entries();

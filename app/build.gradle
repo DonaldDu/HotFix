@@ -37,7 +37,7 @@ if (pluginEnable) {
     apply plugin: 'com.dhy.HotFixPlugin'
     hotFixUploader {
         batScriptPath = BAT_PATH_DEPLOY_APK_HOTFIX
-        extras = ['testReleaseTypes': '0,1', 'bigTypeCode': 30000]
+        extras = ['debugReleaseTypes': '0,1', 'HotFixType': 30000]
     }
 }
 

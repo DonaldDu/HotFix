@@ -17,15 +17,16 @@ class HotFixPlugin implements Plugin<Project> {
         if (project.android.hasProperty("applicationVariants")) {
             project.android.applicationVariants.all { variant ->
                 String variantName = variant.name.capitalize()
-                createUploadPatchTask(variant).dependsOn project.tasks["assemble${variantName}"]
-                createGenPatchTask(variant)
+                createUploadApkTask(variant).dependsOn project.tasks["assemble${variantName}"]
+                createUploadHotfixTask(variant).dependsOn project.tasks["assemble${variantName}"]
+                createGenHotfixTask(variant)
             }
         }
     }
 
-    private Task createUploadPatchTask(Object variant) {
+    private Task createUploadHotfixTask(Object variant) {
         String variantName = variant.name.capitalize()
-        Task task = project.tasks.create("upload${variantName}Patch").doLast {
+        Task task = project.tasks.create("upload${variantName}Hotfix").doLast {
             File apkFile = variant.outputs[0].outputFile
             File patch = HotFixPatch.genHotFixPatch(apkFile, variant.applicationId, variant.versionCode)
             println 'HotFixPatch: ' + patch.name
@@ -35,9 +36,19 @@ class HotFixPlugin implements Plugin<Project> {
         return task
     }
 
-    private Task createGenPatchTask(Object variant) {
+    private Task createUploadApkTask(Object variant) {
         String variantName = variant.name.capitalize()
-        Task task = project.tasks.create("gen${variantName}Patch").doLast {
+        Task task = project.tasks.create("upload${variantName}Apk").doLast {
+            File apkFile = variant.outputs[0].outputFile
+            startBatScript(variant, apkFile)
+        }
+        task.group = 'hotFix'
+        return task
+    }
+
+    private Task createGenHotfixTask(Object variant) {
+        String variantName = variant.name.capitalize()
+        Task task = project.tasks.create("gen${variantName}Hotfix").doLast {
             File apkFile = variant.outputs[0].outputFile
             if (apkFile.exists()) {
                 File patch = HotFixPatch.genHotFixPatch(apkFile, variant.applicationId, variant.versionCode)
