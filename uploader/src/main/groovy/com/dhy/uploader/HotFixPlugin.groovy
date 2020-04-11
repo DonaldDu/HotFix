@@ -30,7 +30,7 @@ class HotFixPlugin implements Plugin<Project> {
             File apkFile = variant.outputs[0].outputFile
             File patch = HotFixPatch.genHotFixPatch(apkFile, variant.applicationId, variant.versionCode)
             println 'HotFixPatch: ' + patch.name
-            startBatScript(variant, patch)
+            startScript(variant, patch)
         }
         task.group = 'hotFix'
         return task
@@ -40,7 +40,7 @@ class HotFixPlugin implements Plugin<Project> {
         String variantName = variant.name.capitalize()
         Task task = project.tasks.create("upload${variantName}Apk").doLast {
             File apkFile = variant.outputs[0].outputFile
-            startBatScript(variant, apkFile)
+            startScript(variant, apkFile)
         }
         task.group = 'hotFix'
         return task
@@ -59,11 +59,11 @@ class HotFixPlugin implements Plugin<Project> {
         return task
     }
 
-    private void startBatScript(Object variant, File apkFile) {
+    private void startScript(Object variant, File apkFile) {
         BatParams params = new BatParams(variant.applicationId, variant.versionName, variant.versionCode, isDebug(variant))
         params.apkFilePath = apkFile.absolutePath
         params.updateLog = getUpdateLog()
-        Util.excuteCMD(new File(setting.batScriptPath), params, setting.extras)
+        CmdUtil.excuteCMD(new File(setting.postmanScriptPath), params, setting.extras)
     }
 
     private void createUpdateLogFile() {

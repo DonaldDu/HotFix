@@ -8,6 +8,7 @@ dependencies {
     implementation 'io.sigpipe:jbsdiff:1.0'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'commons-io:commons-io:2.6'
+    implementation 'org.json:json:20190722'
 }
 
 apply plugin: 'java'

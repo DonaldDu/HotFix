@@ -36,7 +36,7 @@ android {
 if (pluginEnable) {
     apply plugin: 'com.dhy.HotFixPlugin'
     hotFixUploader {
-        batScriptPath = BAT_PATH_DEPLOY_APK_HOTFIX
+        postmanScriptPath = DEPLOY_APK_HOTFIX
         extras = ['debugReleaseTypes': '0,1', 'HotFixType': 30000]
     }
 }
