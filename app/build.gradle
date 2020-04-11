@@ -22,8 +22,7 @@ android {
         }
         debug {
             versionNameSuffix = '.' + defaultConfig.versionCode
-//            minifyEnabled true
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -34,7 +33,7 @@ android {
 }
 
 if (pluginEnable) {
-    apply plugin: 'com.dhy.HotFixPlugin'
+    apply plugin: 'com.github.DonaldDu.HotFix'
     hotFixUploader {
         postmanScriptPath = DEPLOY_APK_HOTFIX
         extras = ['debugReleaseTypes': '0,1', 'HotFixType': 30000]
