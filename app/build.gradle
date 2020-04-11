@@ -36,7 +36,7 @@ if (pluginEnable) {
     apply plugin: 'com.github.DonaldDu.HotFix'
     hotFixUploader {
         postmanScriptPath = DEPLOY_APK_HOTFIX
-        extras = ['debugReleaseTypes': '0,1', 'HotFixType': 30000]
+        extras = ['debugReleaseTypes': '0,1', 'hotFixType': 30000]
     }
 }
 
