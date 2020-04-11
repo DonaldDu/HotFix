@@ -102,7 +102,7 @@ public class HotFix {
         File folder = getHotFixFolder(context);
         File[] files = folder.listFiles();
         File patch = null;
-        Pattern pattern = Pattern.compile("(\\d+)\\.patch\\.apk");
+        Pattern pattern = Pattern.compile("(\\d+)\\.hotfix\\.apk");
         if (files != null) {
             for (File file : files) {//1.patch.apk
                 String name = file.getName();
