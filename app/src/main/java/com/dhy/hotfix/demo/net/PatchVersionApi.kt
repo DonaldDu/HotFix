@@ -9,7 +9,6 @@ import com.dhy.hotfix.updater.IPatchVersionApi.Companion.HOTFIX_USER_CODE
 import com.dhy.hotfix.updater.IPatchVersionApi.Companion.HOTFIX_VERSION_CODE
 import com.dhy.hotfix.updater.PatchUser
 import com.dhy.hotfix.updater.checkPatchVersion
-import com.google.gson.Gson
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -21,21 +20,17 @@ import retrofit2.http.Query
 class PatchVersionApi : IPatchVersionApi {
     private val api = getApi()
     override fun fetchPatchUsers(): Observable<List<PatchUser>> {
-        return api.checkVersion(APPLICATION_ID, HOTFIX_USER_CODE + VERSION_TYPE).map {
-            if (it.data == null) {
-                listOf(PatchUser())
-            } else {
-                val json = it.data.message
-                val users = Gson().fromJson(json, Array<PatchUser>::class.java) as Array<PatchUser>
-                users.toList()
+        return api.checkVersion(APPLICATION_ID, HOTFIX_USER_CODE + VERSION_TYPE)
+            .map {
+                parseToPatchUsers(it.data?.message)
             }
-        }
     }
 
     override fun checkPatchVersion(): Observable<IPatchVersion> {
-        return api.checkVersion(APPLICATION_ID, HOTFIX_VERSION_CODE + VERSION_TYPE).map {
-            it.data ?: AppVersion()
-        }
+        return api.checkVersion(APPLICATION_ID, HOTFIX_VERSION_CODE + VERSION_TYPE)
+            .map {
+                it.data ?: AppVersion()
+            }
     }
 
     private fun getApi(): Api {
