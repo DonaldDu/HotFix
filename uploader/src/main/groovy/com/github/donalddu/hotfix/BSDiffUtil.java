@@ -1,4 +1,4 @@
-package com.dhy.uploader;
+package com.github.donalddu.hotfix;
 
 import java.io.File;
 import java.io.IOException;

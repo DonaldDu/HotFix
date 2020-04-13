@@ -1,4 +1,4 @@
-package com.dhy.uploader;
+package com.github.donalddu.hotfix;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;

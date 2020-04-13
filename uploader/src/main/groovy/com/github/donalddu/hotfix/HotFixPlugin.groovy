@@ -1,4 +1,4 @@
-package com.dhy.uploader
+package com.github.donalddu.hotfix
 
 
 import org.apache.commons.io.FileUtils
@@ -38,7 +38,7 @@ class HotFixPlugin implements Plugin<Project> {
 
     private Task createUploadApkTask(Object variant) {
         String variantName = variant.name.capitalize()
-        Task task = project.tasks.create("upload${variantName}Apk").doLast {
+        Task task = project.tasks.create("upload${variantName}RawApk").doLast {
             File apkFile = variant.outputs[0].outputFile
             startScript(variant, apkFile)
         }

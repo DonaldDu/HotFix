@@ -1,4 +1,4 @@
-package com.dhy.uploader
+package com.github.donalddu.hotfix
 
 class UploaderSetting {
     public Boolean enable = true

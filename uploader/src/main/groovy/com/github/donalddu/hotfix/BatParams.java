@@ -1,4 +1,4 @@
-package com.dhy.uploader;
+package com.github.donalddu.hotfix;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
