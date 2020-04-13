@@ -116,13 +116,15 @@ fun Activity.checkPatchVersion(api: IPatchVersionApi, user: String) {
     }
 }
 
+internal val Context.localPatchVersionCode: Int
+    get() {
+        val pv = HotFix.getPatchVersion(this)
+        val vc = HotFix.getAppVersionCode(this)
+        return kotlin.math.max(pv, vc)
+    }
+
 fun IPatchVersion?.isNewPatch(context: Context): Boolean {
-    return if (this != null && versionCode > 0) {
-        val pv = HotFix.getPatchVersion(context)
-        val vc = HotFix.getAppVersionCode(context)
-        val localVersionCode = kotlin.math.max(pv, vc)
-        versionCode > localVersionCode
-    } else false
+    return this != null && versionCode > context.localPatchVersionCode
 }
 
 /**

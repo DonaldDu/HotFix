@@ -7,22 +7,22 @@ android {
     defaultConfig {
         applicationId "com.dhy.hotfix.demo"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField "int", "VERSION_TYPE", '1'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+//            minifyEnabled true
+            buildConfigField "int", "VERSION_TYPE", '0'
             versionNameSuffix = '.' + defaultConfig.versionCode
-            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -54,4 +54,8 @@ dependencies {
     implementation project(path: ':updater')
     implementation 'io.reactivex.rxjava2:rxjava:2.2.19'
     implementation 'com.squareup.okhttp3:okhttp:4.4.1'
+
+    implementation 'com.squareup.retrofit2:retrofit:2.7.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.7.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.7.2'
 }

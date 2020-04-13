@@ -37,4 +37,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="check patch version" />
+
+    <TextView
+        android:id="@+id/tvShowPatch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="" />
+
 </LinearLayout>

@@ -97,7 +97,7 @@ public class HotFix {
         return String.format("%d.hotfix.apk", versionCode);
     }
 
-    private static File findPatch(Context context) {
+    public static File findPatch(Context context) {
         int versionCode = getAppVersionCode(context);
         File folder = getHotFixFolder(context);
         File[] files = folder.listFiles();
